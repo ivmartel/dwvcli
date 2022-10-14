@@ -12,7 +12,7 @@ _yargs.usage('Usage: $0 -i [str] [-d] [-r [str] -o [str]]')
     ],
     [
       '$0 -i data.dcm -r resources/rules.json -o out.dcm',
-      'Write back the input DICOM file using the input fules file.'
+      'Write back the input DICOM file using the input rules file.'
     ],
   ])
   .alias('i', 'input')

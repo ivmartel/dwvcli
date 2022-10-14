@@ -18,5 +18,5 @@ Examples:
   main -i data.dcm -d                       Dump the content of the input DICOM
                                             file.
   main -i data.dcm -r rules.json -o out.dc  Write back the input DICOM file usin
-  m                                         g the input fules file.
+  m                                         g the input rules file.
 ```
