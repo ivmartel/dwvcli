@@ -1,0 +1,8 @@
+{
+    "default": {
+      "action": "copy", "value": null
+    },
+    "PatientName": {
+      "action": "replace", "value": "Anonymised"
+    }
+  }

@@ -1,0 +1,25 @@
+{
+  "name": "dwvcli",
+  "version": "0.1.0",
+  "description": "dwv cli",
+  "license": "GPL-3.0",
+  "author": "ivmartel <ivmartel@gmail.com>",
+  "homepage": "https://ivmartel.github.io/dwv/",
+  "main": "main.js",
+  "repository": {
+    "type": "git",
+    "url": "."
+  },
+  "type": "module",
+  "dependencies": {
+    "canvas": "^2.8.0",
+    "dwv": "^0.31.0-beta",
+    "yargs": "^17.6.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.23.1"
+  },
+  "scripts": {
+    "lint": "eslint 'main.js'"
+  }
+}
