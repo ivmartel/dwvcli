@@ -1,0 +1,23 @@
+# Node.js CI workflow
+# The base href is set in the npm build script
+
+name: Node.js CI
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16.x'
+    - name: Install dependencies
+      run: yarn install --frozen-lockfile
+    - name: Run lint
+      run: yarn run lint
+
