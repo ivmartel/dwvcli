@@ -293,10 +293,10 @@ doctrine@^3.0.0:
   dependencies:
     esutils "^2.0.2"
 
-dwv@^0.31.0-beta:
-  version "0.31.0-beta.14"
-  resolved "https://registry.yarnpkg.com/dwv/-/dwv-0.31.0-beta.14.tgz#58e0cf8bd81ba4e8a80bc789a2afd73f62675188"
-  integrity sha512-b59gEPt0FqdIXc/mRDXKXxYJeTwqqzRCECQW/keiJUdWimFu9mfPmp2t1Igr1E+kz4f1kYrGqiIwQZJeInHVDQ==
+dwv@^0.31.0-beta.23:
+  version "0.31.0-beta.23"
+  resolved "https://registry.yarnpkg.com/dwv/-/dwv-0.31.0-beta.23.tgz#5accf83560693ac3d0e36b81b4244a2611df5e9d"
+  integrity sha512-Ir039n94tyq/fhssCpfT/pHWtEvR3yXEatHkTk1ZLh3NYnPNrLdM/N+7Mj380Wl1mGDtgNyjoepU8ybunRSHvQ==
   dependencies:
     i18next "~21.6.12"
     i18next-browser-languagedetector "~6.1.2"
