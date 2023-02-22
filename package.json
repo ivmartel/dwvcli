@@ -4,11 +4,11 @@
   "description": "dwv cli",
   "license": "GPL-3.0",
   "author": "ivmartel <ivmartel@gmail.com>",
-  "homepage": "https://ivmartel.github.io/dwv/",
+  "homepage": "https://ivmartel.github.io/dwvcli/",
   "main": "main.js",
   "repository": {
     "type": "git",
-    "url": "."
+    "url": "https://ivmartel.github.io/dwvcli"
   },
   "type": "module",
   "dependencies": {
