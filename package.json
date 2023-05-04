@@ -13,7 +13,7 @@
   "type": "module",
   "dependencies": {
     "canvas": "^2.11.2",
-    "dwv": "^0.31.0",
+    "dwv": "^0.31.1",
     "yargs": "^17.7.2"
   },
   "devDependencies": {
