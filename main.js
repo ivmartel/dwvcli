@@ -53,13 +53,13 @@ console.log('> Running dwv parser on: ' + args.input);
 const dicomBuffer = fs.readFileSync(args.input, null).buffer;
 
 // setup the dicom parser
-const dicomParser = new dwv.dicom.DicomParser();
+const dicomParser = new dwv.DicomParser();
 // parse the buffer
 dicomParser.parse(dicomBuffer);
 
 // dump
 if (args.dump) {
-  console.log(dicomParser.getDicomElements().dump());
+  console.log(dicomParser.getDicomElements());
 }
 
 // write mode
@@ -70,9 +70,9 @@ if (typeof args.rules !== 'undefined') {
   const rulesJson = JSON.parse(rulesData);
 
   // get output buffer
-  const writer = new dwv.dicom.DicomWriter();
+  const writer = new dwv.DicomWriter();
   writer.rules = rulesJson;
-  const elements = dicomParser.getRawDicomElements();
+  const elements = dicomParser.getDicomElements();
   const outputDicomBuffer = writer.getBuffer(elements);
   if (outputDicomBuffer === null) {
     throw new Error('Problem when creating output dicom buffer...');
