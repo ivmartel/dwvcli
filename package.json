@@ -20,6 +20,6 @@
     "eslint": "^8.46.0"
   },
   "scripts": {
-    "lint": "eslint 'main.js'"
+    "lint": "eslint '*.js'"
   }
 }
