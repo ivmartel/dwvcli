@@ -1,22 +1,9 @@
 DWV cli
 =======
 
-cli for the [dwv](https://github.com/ivmartel/dwv) library.
+Various clis for the [dwv](https://github.com/ivmartel/dwv) library.
 
-```bash
-Usage: main -i [str] [-d] [-r [str] -o [str]]
+- `dump`: dump the content of a DICOM file to stdout
+- `anonym`: anonymise a file according to input rules
 
-Options:
-  -i, --input    Input dicom file name                                [required]
-  -o, --output   Output dicom file name
-  -r, --rules    Writing rules file name
-  -d, --dump     Parse and dump content to output stream               [boolean]
-  -v, --version  Show version number                                   [boolean]
-  -h, --help     Show help                                             [boolean]
-
-Examples:
-  main -i data.dcm -d                       Dump the content of the input DICOM
-                                            file.
-  main -i data.dcm -r rules.json -o out.dc  Write back the input DICOM file usin
-  m                                         g the input rules file.
-```
+Run them, for example, with: `node dump -h` in the root folder.

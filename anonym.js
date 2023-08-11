@@ -4,12 +4,8 @@ import yargs from 'yargs';
 import {hideBin} from 'yargs/helpers';
 
 const _yargs = yargs();
-_yargs.usage('Usage: $0 -i [str] [-d] [-r [str] -o [str]]')
+_yargs.usage('Usage: $0 -i [str] [-d] -r [str] -o [str]')
   .example([
-    [
-      '$0 -i data.dcm -d',
-      'Dump the content of the input DICOM file.'
-    ],
     [
       '$0 -i data.dcm -r resources/rules.json -o out.dcm',
       'Write back the input DICOM file using the input rules file.'
@@ -24,14 +20,9 @@ _yargs.usage('Usage: $0 -i [str] [-d] [-r [str] -o [str]]')
   .alias('r', 'rules')
   .nargs('r', 1)
   .describe('r', 'Writing rules file name')
-  .implies('o', 'r')
-  .implies('r', 'o')
-  .alias('d', 'dump')
-  .boolean(['d'])
-  .describe('d', 'Parse and dump content to output stream')
   .alias('v', 'version')
   .alias('h', 'help')
-  .demandOption(['i'])
+  .demandOption(['i', 'o', 'r'])
   .strict()
   .version('0.1.0')
   .check(argv => {
@@ -47,7 +38,8 @@ _yargs.usage('Usage: $0 -i [str] [-d] [-r [str] -o [str]]')
   });
 const args = _yargs.parse(hideBin(process.argv));
 
-console.log('> Running dwv parser on: ' + args.input);
+console.log('> Running dwv (v' +
+dwv.getDwvVersion() + ') anonymisation on: ' + args.input);
 
 // read dicom file
 const dicomBuffer = fs.readFileSync(args.input, null).buffer;
@@ -57,30 +49,21 @@ const dicomParser = new dwv.DicomParser();
 // parse the buffer
 dicomParser.parse(dicomBuffer);
 
-// dump
-if (args.dump) {
-  console.log(dicomParser.getDicomElements());
+// read rules file
+const rulesData = fs.readFileSync(args.rules, 'utf-8');
+const rulesJson = JSON.parse(rulesData);
+
+// get output buffer
+const writer = new dwv.DicomWriter();
+writer.rules = rulesJson;
+const elements = dicomParser.getDicomElements();
+const outputDicomBuffer = writer.getBuffer(elements);
+if (outputDicomBuffer === null) {
+  throw new Error('Problem when creating output dicom buffer...');
 }
 
-// write mode
-// (if rules is there, so should output, see yargs implies)
-if (typeof args.rules !== 'undefined') {
-  // read rules file
-  const rulesData = fs.readFileSync(args.rules, 'utf-8');
-  const rulesJson = JSON.parse(rulesData);
-
-  // get output buffer
-  const writer = new dwv.DicomWriter();
-  writer.rules = rulesJson;
-  const elements = dicomParser.getDicomElements();
-  const outputDicomBuffer = writer.getBuffer(elements);
-  if (outputDicomBuffer === null) {
-    throw new Error('Problem when creating output dicom buffer...');
-  }
-
-  // write output buffer
-  fs.writeFileSync(args.output, new DataView(outputDicomBuffer));
-}
+// write output buffer
+fs.writeFileSync(args.output, new DataView(outputDicomBuffer));
 
 // all good
 process.exit();

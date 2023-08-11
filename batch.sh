@@ -4,7 +4,5 @@
 
 for filepath in $1/*; do
   # anonymise
-  node main -i $filepath -r rules.json -o "out-$(basename $filepath)"
-  # read back
-  node main -i "out-$(basename $filepath)"
+  node anonym -i $filepath -r rules.json -o "out-$(basename $filepath)"
 done
