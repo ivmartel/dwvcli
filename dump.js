@@ -24,10 +24,6 @@ _yargs.usage('Usage: $0 -i [str]')
     if (!fs.existsSync(argv.input)) {
       throw new Error('Input DICOM file does not exist.');
     }
-    if (typeof argv.rules !== 'undefined' &&
-      !fs.existsSync(argv.rules)) {
-      throw new Error('Input rules file does not exist.');
-    }
     return true;
   });
 const args = _yargs.parse(hideBin(process.argv));
