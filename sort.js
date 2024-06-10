@@ -49,7 +49,7 @@ const elements = dicomParser.getDicomElements()
 // https://dicom.innolitics.com/ciods/ct-image/general-series/0020000e
 const seriesUidElement = elements['0020000E'];
 if (typeof seriesUidElement === 'undefined') {
-  throw new Error('Series Instance UI is undefined.');
+  throw new Error('Series Instance UID is undefined.');
 }
 
 // dir based on Series UID
