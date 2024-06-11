@@ -27,7 +27,7 @@ _yargs.usage('Usage: $0 -i [str] [-m]')
     if (!fs.existsSync(argv.input)) {
       throw new Error('Input DICOM file does not exist.');
     }
-    if (fs.lstatSync(argv.input).isDirectory() ) {
+    if (fs.lstatSync(argv.input).isDirectory()) {
       throw new Error('Input file is a directory.');
     }
     return true;
@@ -45,7 +45,7 @@ const dicomParser = new dwv.DicomParser();
 // parse the buffer
 dicomParser.parse(dicomBuffer);
 
-const elements = dicomParser.getDicomElements()
+const elements = dicomParser.getDicomElements();
 // https://dicom.innolitics.com/ciods/ct-image/general-series/0020000e
 const seriesUidElement = elements['0020000E'];
 if (typeof seriesUidElement === 'undefined') {
@@ -56,7 +56,7 @@ if (typeof seriesUidElement === 'undefined') {
 const inputDirname = path.dirname(args.input);
 const dir = inputDirname + '/' + seriesUidElement.value[0];
 // create dir if not present
-if (!fs.existsSync(dir)){
+if (!fs.existsSync(dir)) {
   fs.mkdirSync(dir);
 }
 // file names
