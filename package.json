@@ -17,7 +17,7 @@
     "yargs": "^17.7.2"
   },
   "devDependencies": {
-    "@eslint/js": "^9.9.1",
+    "@eslint/js": "^9.10.0",
     "@stylistic/eslint-plugin-js": "^2.7.2",
     "eslint": "^9.9.1",
     "globals": "^15.9.0"
