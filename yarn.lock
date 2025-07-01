@@ -191,10 +191,10 @@ callsites@^3.0.0:
   resolved "https://registry.yarnpkg.com/callsites/-/callsites-3.1.0.tgz#b3630abd8943432f54b3f0519238e33cd7df2f73"
   integrity sha512-P8BjAsXvZS+VIDUI11hHCQEv74YT67YUi5JJFNWIqL235sBmjX4+qx9Muvls5ivyNENctx46xQLQ3aTuE7ssaQ==
 
-canvas@^3.1.1:
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/canvas/-/canvas-3.1.1.tgz#d5399808e5cd19b0a9679248a7f98929e3f96341"
-  integrity sha512-o8JptL14zrYFYSh5r7ClVzuwG77tvjRBgSJECyIF6AAHpL4MgORhlI+rru3/ZPKtdC7uopl+biESZWz1l/NpFA==
+canvas@^3.1.2:
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/canvas/-/canvas-3.1.2.tgz#a98406ef6178d31e39eb7dc0a488b1181555b792"
+  integrity sha512-Z/tzFAcBzoCvJlOSlCnoekh1Gu8YMn0J51+UAuXJAbW1Z6I9l2mZgdD7738MepoeeIcUdDtbMnOg6cC7GJxy/g==
   dependencies:
     node-addon-api "^7.0.0"
     prebuild-install "^7.1.3"
