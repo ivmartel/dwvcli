@@ -1,7 +1,11 @@
-import dwv from 'dwv';
 import fs from 'fs';
 import yargs from 'yargs';
 import {hideBin} from 'yargs/helpers';
+import {
+  getDwvVersion,
+  DicomParser,
+  DicomWriter
+} from 'dwv';
 
 const _yargs = yargs();
 _yargs.usage('Usage: $0 -i [str] [-d] -r [str] -o [str]')
@@ -39,13 +43,13 @@ _yargs.usage('Usage: $0 -i [str] [-d] -r [str] -o [str]')
 const args = _yargs.parse(hideBin(process.argv));
 
 console.log('> Running dwv (v' +
-dwv.getDwvVersion() + ') anonymisation on: ' + args.input);
+getDwvVersion() + ') anonymisation on: ' + args.input);
 
 // read dicom file
 const dicomBuffer = fs.readFileSync(args.input, null).buffer;
 
 // setup the dicom parser
-const dicomParser = new dwv.DicomParser();
+const dicomParser = new DicomParser();
 // parse the buffer
 dicomParser.parse(dicomBuffer);
 
@@ -54,7 +58,7 @@ const rulesData = fs.readFileSync(args.rules, 'utf-8');
 const rulesJson = JSON.parse(rulesData);
 
 // get output buffer
-const writer = new dwv.DicomWriter();
+const writer = new DicomWriter();
 writer.rules = rulesJson;
 const elements = dicomParser.getDicomElements();
 const outputDicomBuffer = writer.getBuffer(elements);

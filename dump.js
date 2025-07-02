@@ -1,7 +1,10 @@
-import dwv from 'dwv';
 import fs from 'fs';
 import yargs from 'yargs';
 import {hideBin} from 'yargs/helpers';
+import {
+  getDwvVersion,
+  DicomParser
+} from 'dwv';
 
 const _yargs = yargs();
 _yargs.usage('Usage: $0 -i [str]')
@@ -29,13 +32,13 @@ _yargs.usage('Usage: $0 -i [str]')
 const args = _yargs.parse(hideBin(process.argv));
 
 console.log('> Running dwv (v' +
-  dwv.getDwvVersion() + ') dump on: ' + args.input);
+  getDwvVersion() + ') dump on: ' + args.input);
 
 // read dicom file
 const dicomBuffer = fs.readFileSync(args.input, null).buffer;
 
 // setup the dicom parser
-const dicomParser = new dwv.DicomParser();
+const dicomParser = new DicomParser();
 // parse the buffer
 dicomParser.parse(dicomBuffer);
 
