@@ -42,7 +42,11 @@ const dicomBuffer = new Uint8Array(nodeBuffer).buffer;
 // setup the dicom parser
 const dicomParser = new DicomParser();
 // parse the buffer
-dicomParser.parse(dicomBuffer);
+try {
+  dicomParser.parse(dicomBuffer);
+} catch (e) {
+  console.log('Error: ', e);
+}
 
 // dump
 console.log(dicomParser.getDicomElements());
