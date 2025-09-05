@@ -35,7 +35,9 @@ console.log('> Running dwv (v' +
   getDwvVersion() + ') dump on: ' + args.input);
 
 // read dicom file
-const dicomBuffer = fs.readFileSync(args.input, null).buffer;
+const nodeBuffer = fs.readFileSync(args.input);
+// corrupt buffer in some cases... cast seems to fix it
+const dicomBuffer = new Uint8Array(nodeBuffer).buffer;
 
 // setup the dicom parser
 const dicomParser = new DicomParser();
