@@ -47,7 +47,7 @@ function parseArgs(argv) {
  * Parse a DICOM file.
  *
  * @param {string} inputPath The file path.
- * @returns {object} The dicom elements.
+ * @returns {object|undefined} The dicom elements.
  */
 function parseDicomFile(inputPath) {
   // read dicom file
@@ -62,6 +62,7 @@ function parseDicomFile(inputPath) {
     dicomParser.parse(dicomBuffer);
   } catch (e) {
     console.log('Error: ', e);
+    return;
   }
 
   return dicomParser.getDicomElements();
@@ -78,7 +79,9 @@ console.log('> Running dwv (v' +
 // parse dicom file
 const elements = parseDicomFile(args.input);
 // log the dicom elements
-console.log(elements);
+if (typeof elements !== 'undefined') {
+  console.log(elements);
+}
 
 // all good
 process.exit();
