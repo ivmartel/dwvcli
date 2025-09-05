@@ -54,12 +54,12 @@ function parseArgs(argv) {
 /**
  * Parse a DICOM file.
  *
- * @param {string} path The file path.
+ * @param {string} inputPath The file path.
  * @returns {object} The dicom elements.
  */
-function parseDicomFile(path) {
+function parseDicomFile(inputPath) {
   // read dicom file
-  const nodeBuffer = fs.readFileSync(path);
+  const nodeBuffer = fs.readFileSync(inputPath);
   // corrupt buffer in some cases... cast seems to fix it
   const dicomBuffer = new Uint8Array(nodeBuffer).buffer;
 
@@ -78,11 +78,11 @@ function parseDicomFile(path) {
 /**
  * Parse a rules file.
  *
- * @param {string} path The input path.
+ * @param {string} inputPath The input path.
  * @returns {object} The rules.
  */
-function parseRulesFile(path) {
-  const rulesData = fs.readFileSync(path, 'utf-8');
+function parseRulesFile(inputPath) {
+  const rulesData = fs.readFileSync(inputPath, 'utf-8');
   return JSON.parse(rulesData);
 }
 
