@@ -19,28 +19,30 @@ function parseArgs(argv) {
     .example([
       [
         '$0 -i data.dcm',
-        'Move thie input file into a folder ' +
+        'Move the input file into a folder ' +
         'named after its Series Instance UID.'
+      ],
+      [
+        '$0 -i /path/to/data',
+        'Move the dicom files of the input folder into a folder ' +
+        'named after their Series Instance UID.'
       ]
     ])
     .alias('i', 'input')
     .nargs('i', 1)
-    .describe('i', 'Input dicom file name')
+    .describe('i', 'Input dicom file name or folder of dicom files')
     .alias('m', 'move')
-    .describe('m', 'Move the input file into the new dir')
+    .describe('m', 'Flag to move, and not copy, the input file(s) ' +
+      'into the Series instance UID dir')
     .alias('v', 'version')
     .alias('h', 'help')
     .demandOption(['i'])
     .strict()
     .version('0.1.0')
     .check(argv2 => {
-      // check that input exist
+      // check that input path exists
       if (!fs.existsSync(argv2.input)) {
-        throw new Error('Input DICOM file does not exist.');
-      }
-      // check that input is not a directory
-      if (fs.lstatSync(argv2.input).isDirectory()) {
-        throw new Error('Input file is a directory.');
+        throw new Error('Input path does not exist.');
       }
       return true;
     });
@@ -48,10 +50,31 @@ function parseArgs(argv) {
 }
 
 /**
+ * Get the list of file paths: if the input path
+ * is a folder, returns the list of files of the folder;
+ * if the input path is a file returns just the file.
+ *
+ * @param {string} inputPath The input path.
+ * @returns {string[]} The list of file paths.
+ */
+function getFilePaths(inputPath) {
+  let paths = [];
+  if (fs.lstatSync(inputPath).isDirectory()) {
+    const names = fs.readdirSync(args.input);
+    for (const name of names) {
+      paths.push(path.join(inputPath, name));
+    }
+  } else {
+    paths = [inputPath];
+  }
+  return paths;
+}
+
+/**
  * Parse a DICOM file.
  *
  * @param {string} inputPath The file path.
- * @returns {object} The dicom elements.
+ * @returns {object|undefined} The dicom elements.
  */
 function parseDicomFile(inputPath) {
   // read dicom file
@@ -66,6 +89,7 @@ function parseDicomFile(inputPath) {
     dicomParser.parse(dicomBuffer);
   } catch (e) {
     console.log('Error: ', e);
+    return;
   }
 
   return dicomParser.getDicomElements();
@@ -104,20 +128,29 @@ function getDistDir(inputPath, elements) {
  * @param {string} dir The destination directory.
  * @param {boolean} moveOrCopy Move or copy flag: true to move,
  * false to copy.
+ * @returns {boolean} True if all went well.
  */
 function moveOrCopyInputFile(inputPath, dir, moveOrCopy) {
   // file names
   const inputFilename = path.basename(inputPath);
-  const dest = dir + '/' + inputFilename;
-  const errorCb = (error) => {
-    console.log('Error: ', error);
-  };
+  const destPath = path.join(dir, inputFilename);
   // move or copy
   if (moveOrCopy) {
-    fs.rename(inputPath, dest, errorCb);
+    try {
+      fs.renameSync(inputPath, destPath);
+    } catch (e) {
+      console.log('Rename error: ', e);
+      return false;
+    }
   } else {
-    fs.copyFile(inputPath, dest, errorCb);
+    try {
+      fs.copyFileSync(inputPath, destPath);
+    } catch (e) {
+      console.log('Copy error: ', e);
+      return false;
+    }
   }
+  return true;
 }
 
 // *************************************
@@ -128,12 +161,20 @@ const args = parseArgs(process.argv);
 console.log('> Running dwv (v' +
   getDwvVersion() + ') sort on: ' + args.input);
 
-// parse dicom file
-const elements = parseDicomFile(args.input);
-// get the destination directory
-const dir = getDistDir(args.input, elements);
-// move or copy input file to destination
-moveOrCopyInputFile(args.input, dir, args.move);
+// get the file list
+const filePaths = getFilePaths(args.input);
+// move or copy for each file
+for (const filePath of filePaths) {
+  // parse dicom file
+  const elements = parseDicomFile(filePath);
+  if (typeof elements === 'undefined') {
+    continue;
+  }
+  // get the destination directory
+  const dir = getDistDir(filePath, elements);
+  // move or copy input file to destination
+  moveOrCopyInputFile(filePath, dir, args.move);
+}
 
 // all good
 process.exit();
