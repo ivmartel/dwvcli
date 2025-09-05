@@ -155,7 +155,7 @@ if (!fs.existsSync(args.output)) {
 
 // get the file list
 const filePaths = getFilePaths(args.input);
-// move or copy for each file
+// apply write rules for each file
 for (const filePath of filePaths) {
   // parse dicom file
   const elements = parseDicomFile(filePath);
