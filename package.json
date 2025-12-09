@@ -24,5 +24,6 @@
   },
   "scripts": {
     "lint": "eslint '*.js'"
-  }
+  },
+  "packageManager": "yarn@4.12.0"
 }
