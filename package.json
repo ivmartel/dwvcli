@@ -12,7 +12,7 @@
   },
   "type": "module",
   "dependencies": {
-    "canvas": "^3.2.0",
+    "canvas": "^3.2.1",
     "dwv": "^0.35.1",
     "yargs": "^18.0.0"
   },
