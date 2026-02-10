@@ -33,7 +33,8 @@ function parseArgs(argv) {
     .describe('i', 'Input dicom file name or folder of dicom files')
     .alias('t', 'tag')
     .nargs('t', 1)
-    .describe('t', 'Filter tag, can be seriesUID or orientation, defaults to seriesUID')
+    .describe('t', 'Filter tag, can be seriesUID or orientation, ' +
+      'defaults to seriesUID')
     .alias('m', 'move')
     .describe('m', 'Flag to move, and not copy, the input file(s) ' +
       'into the Series instance UID dir')
@@ -187,7 +188,7 @@ console.log('> Running dwv (v' +
 const possibleTags = ['seriesuid', 'orientation'];
 let sortTag = possibleTags[0];
 if (typeof args.tag !== 'undefined') {
-  const inputTag = args.tag.toLowerCase()
+  const inputTag = args.tag.toLowerCase();
   if (possibleTags.includes(inputTag)) {
     sortTag = inputTag;
   }
