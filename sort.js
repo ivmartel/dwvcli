@@ -20,17 +20,20 @@ function parseArgs(argv) {
       [
         '$0 -i data.dcm',
         'Move the input file into a folder ' +
-        'named after its Series Instance UID.'
+        'named after the filter tag.'
       ],
       [
         '$0 -i /path/to/data',
         'Move the dicom files of the input folder into a folder ' +
-        'named after their Series Instance UID.'
+        'named after the filter tag.'
       ]
     ])
     .alias('i', 'input')
     .nargs('i', 1)
     .describe('i', 'Input dicom file name or folder of dicom files')
+    .alias('t', 'tag')
+    .nargs('t', 1)
+    .describe('t', 'Filter tag, can be seriesUID or orientation, defaults to seriesUID')
     .alias('m', 'move')
     .describe('m', 'Flag to move, and not copy, the input file(s) ' +
       'into the Series instance UID dir')
@@ -95,24 +98,43 @@ function parseDicomFile(inputPath) {
   return dicomParser.getDicomElements();
 }
 
+// list of parsed orientations
+const _orientationList = [];
+
 /**
  * Get the destination directory: input file root +
  *   series UID.
  *
  * @param {string} inputPath The input file path.
  * @param {object} elements The dicom elements.
+ * @param {string} sortTag The sort tag.
  * @returns {string} The destination directory.
  */
-function getDistDir(inputPath, elements) {
-  // https://dicom.innolitics.com/ciods/ct-image/general-series/0020000e
-  const seriesUidElement = elements['0020000E'];
-  if (typeof seriesUidElement === 'undefined') {
-    throw new Error('Series Instance UID is undefined.');
+function getDistDir(inputPath, elements, sortTag) {
+  let sortTagValue;
+  if (sortTag === 'seriesuid') {
+    const element = elements['0020000E'];
+    if (typeof element === 'undefined') {
+      throw new Error('Series Instance UID is undefined.');
+    }
+    sortTagValue = element.value[0];
+  } else if (sortTag === 'orientation') {
+    const element = elements['00200037'];
+    if (typeof element === 'undefined') {
+      throw new Error('Orientation is undefined.');
+    }
+    const orient = element.value.toString();
+    let index = _orientationList.indexOf(orient);
+    if (index === -1) {
+      _orientationList.push(orient);
+      index = _orientationList.length - 1;
+    }
+    sortTagValue = 'orientation' + index;
   }
 
   // dir based on Series UID
   const inputDirname = path.dirname(inputPath);
-  const dir = inputDirname + '/' + seriesUidElement.value[0];
+  const dir = inputDirname + '/' + sortTagValue;
   // create dir if not present
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir);
@@ -161,6 +183,16 @@ const args = parseArgs(process.argv);
 console.log('> Running dwv (v' +
   getDwvVersion() + ') sort on: ' + args.input);
 
+// get the sort tag
+const possibleTags = ['seriesuid', 'orientation'];
+let sortTag = possibleTags[0];
+if (typeof args.tag !== 'undefined') {
+  const inputTag = args.tag.toLowerCase()
+  if (possibleTags.includes(inputTag)) {
+    sortTag = inputTag;
+  }
+}
+
 // get the file list
 const filePaths = getFilePaths(args.input);
 // move or copy for each file
@@ -171,7 +203,7 @@ for (const filePath of filePaths) {
     continue;
   }
   // get the destination directory
-  const dir = getDistDir(filePath, elements);
+  const dir = getDistDir(filePath, elements, sortTag);
   // move or copy input file to destination
   moveOrCopyInputFile(filePath, dir, args.move);
 }
