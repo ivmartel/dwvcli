@@ -64,7 +64,7 @@ function getDirectoryPaths(inputPath) {
       subdirPaths.push(path.join(inputPath, dirent.name));
     }
   }
-  let paths = [];
+  let paths;
   if (subdirPaths.length !== 0) {
     paths = subdirPaths;
   } else {
