@@ -14,7 +14,7 @@
   "dependencies": {
     "canvas": "^3.2.3",
     "dwv": "^0.36.3",
-    "yargs": "^18.0.0"
+    "yargs": "^18.1.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
